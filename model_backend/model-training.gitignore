@@ -1,0 +1,23 @@
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Python environment/cache
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Large model files / training artifacts (usually don't belong in git)
+*.keras
+*.h5
+*.weights.h5
+
+# Data (if you ever download it locally instead of using Drive)
+train/
+data/
+*.png
+*.jpg
+
+# OS junk
+.DS_Store
+Thumbs.db
