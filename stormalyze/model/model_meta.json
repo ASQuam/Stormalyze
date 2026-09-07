@@ -1,0 +1,15 @@
+{
+  "fingerprint": "8f327d",
+  "converted_at": "2026-08-30 18:37",
+  "source": "model_v4.keras",
+  "input_shape": [
+    null,
+    512,
+    512,
+    3
+  ],
+  "output_units": 6,
+  "has_rescaling_layer": true,
+  "source_keras_version": "3.15.1",
+  "rebuilt_for_keras2": true
+}

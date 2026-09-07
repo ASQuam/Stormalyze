@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8" /><title>Stormalyze inference host</title></head>
+<body>
+  <!--
+    Never visible. This document exists purely to give TensorFlow.js a DOM and a
+    WebGL context that OUTLIVE the popup. The action popup is destroyed every time
+    it loses focus, so a model loaded there would have to be re-loaded and its
+    shaders re-compiled on every single analysis. Here the weights stay resident.
+  -->
+  <script src="vendor/tf.min.js"></script>
+  <script type="module" src="offscreen.js"></script>
+</body>
+</html>

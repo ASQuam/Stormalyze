@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="popup.css" />
+  <title>Stormalyze</title>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <h1>Stormalyze</h1>
+      <p class="sub" id="sub">Radar cell classifier &middot; runs locally</p>
+    </div>
+    <div class="head-right">
+      <img id="thumb" class="thumb" alt="Selected region" hidden />
+      <button id="info-btn" class="iconbtn" title="About &amp; disclaimer" aria-label="About">i</button>
+    </div>
+  </header>
+
+  <!-- ---------- idle ---------- -->
+  <section id="view-idle">
+    <button id="analyze" class="primary">Analyze Screen</button>
+    <p class="hint">Click &amp; drag a rectangle. <kbd>Esc</kbd> cancels.</p>
+
+    <dl class="meta">
+      <dt>Model</dt><dd>Cell Classification CNN</dd>
+      <dt>Input</dt><dd>512 &times; 512 &times; 3</dd>
+      <dt>Classes</dt><dd>6</dd>
+      <dt>Weights</dt><dd id="model-id">&mdash;</dd>
+    </dl>
+
+    <section class="status">
+      <span class="label">Status</span>
+      <div id="status" class="value pending">
+        <span class="dot"></span><span id="status-text">Checking model&hellip;</span>
+      </div>
+    </section>
+  </section>
+
+  <!-- ---------- working ---------- -->
+  <section id="view-working" hidden>
+    <div class="card center">
+      <div class="spinner"></div>
+      <p id="working-text">Analyzing&hellip;</p>
+    </div>
+  </section>
+
+  <!-- ---------- result ---------- -->
+  <section id="view-result" hidden>
+    <div class="card headline">
+      <span class="label">Expected hazards</span>
+      <h2 id="top-label">&mdash;</h2>
+      <p id="headline-note" class="headline-note"></p>
+    </div>
+
+    <p id="uncertain" class="uncertain" hidden></p>
+
+    <ul id="hazards" class="hazards"></ul>
+
+    <p id="storm-note" class="storm-note"></p>
+
+    <details class="dropdown">
+      <summary>Official sources</summary>
+      <div class="dropdown-body">
+      <a href="https://www.weather.gov/alerts" target="_blank" rel="noreferrer">
+        Active alerts &amp; warnings &mdash; NWS</a>
+      <a href="https://www.spc.noaa.gov/products/outlook/" target="_blank" rel="noreferrer">
+        Today's severe outlook &mdash; SPC</a>
+      <a href="https://www.spc.noaa.gov/products/md/" target="_blank" rel="noreferrer">
+        Mesoscale discussions &mdash; SPC</a>
+      </div>
+    </details>
+
+    <p class="disclaimer">
+      <b>Not a warning product.</b> This is a student machine-learning experiment that
+      guesses storm structure from a picture. It cannot see rotation, velocity, or
+      warnings. Always act on official NWS information.
+    </p>
+
+    <details id="detail">
+      <summary>Model detail</summary>
+      <ul id="bars" class="bars"></ul>
+      <p id="stats" class="stats"></p>
+    </details>
+
+    <button id="again" class="primary">Analyze Another</button>
+  </section>
+
+  <!-- ---------- error ---------- -->
+  <section id="view-error" hidden>
+    <div class="card error">
+      <h2>Something went wrong</h2>
+      <p id="error-text"></p>
+    </div>
+    <button id="retry" class="primary">Try Again</button>
+  </section>
+
+  <!-- ---------- info ---------- -->
+  <section id="view-info" hidden>
+    <div class="card warnbox">
+      <h2>Not a weather warning service</h2>
+      <p>
+        Stormalyze is a personal machine-learning project. It classifies the
+        <em>appearance</em> of radar reflectivity in a screenshot. It is not affiliated
+        with NOAA, the National Weather Service, or any official body, and it must never
+        be used to make safety decisions.
+      </p>
+      <p>
+        If severe weather threatens you, act on NWS warnings and local emergency
+        instructions &mdash; not on this extension.
+      </p>
+    </div>
+
+    <button id="model-btn" class="secondary">Model information</button>
+
+    <div class="official">
+      <span class="label">Official sources</span>
+      <a href="https://www.weather.gov/alerts" target="_blank" rel="noreferrer">
+        Active alerts &amp; warnings &mdash; NWS</a>
+      <a href="https://www.spc.noaa.gov/products/outlook/" target="_blank" rel="noreferrer">
+        Today's severe outlook &mdash; SPC</a>
+      <a href="https://www.spc.noaa.gov/products/md/" target="_blank" rel="noreferrer">
+        Mesoscale discussions &mdash; SPC</a>
+      <a href="https://www.weather.gov" target="_blank" rel="noreferrer">
+        Local forecast &mdash; weather.gov</a>
+    </div>
+
+    <button id="info-back" class="primary">Back</button>
+  </section>
+
+  <!-- ---------- model information ---------- -->
+  <section id="view-model" hidden>
+    <div class="card">
+      <span class="label">What it does</span>
+      <p class="info-p">
+        A convolutional neural network runs entirely inside your browser on the region you
+        select, and sorts it into one of six radar morphologies. The hazard list that
+        follows is generic reference information for that storm type &mdash; typical
+        threats associated with that structure, not an assessment of the storm on screen.
+      </p>
+    </div>
+
+    <div class="card">
+      <span class="label">What it cannot do</span>
+      <ul class="info-list">
+        <li>See rotation, velocity, or dual-pol data &mdash; it only sees reflectivity colours.</li>
+        <li>Know your location, the time, or any active warnings.</li>
+        <li>Judge storm intensity, size, or how a storm will evolve.</li>
+        <li>Recognise radar imagery whose colour table differs from its training data.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <span class="label">Accuracy</span>
+      <p class="info-p">
+        Trained on roughly a thousand hand-labelled NOAA radar archive images. Best
+        validation accuracy so far is about 96% on held-out data, and it can still be
+        confidently wrong &mdash; particularly on imagery that looks unlike its training set. Open
+        <em>Model detail</em> on any result to see the raw class probabilities.
+      </p>
+    </div>
+
+    <div class="card">
+      <span class="label">Privacy</span>
+      <p class="info-p">
+        Screenshots never leave your machine. The model runs locally, there is no server,
+        and the extension makes no network requests. The only outbound links are the
+        official NOAA pages listed on a result, and those open only when you click them.
+      </p>
+    </div>
+
+    <label class="filebtn">
+      <input type="file" id="file" accept="image/*" hidden />
+      Test the model with an image file
+    </label>
+
+    <button id="model-back" class="primary">Back</button>
+  </section>
+
+  <script src="hazards.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

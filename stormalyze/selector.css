@@ -1,0 +1,100 @@
+/* Injected into the overlay's Shadow DOM (read by background.js, passed to selector.js).
+   Nothing here can affect the host page. */
+
+:host { all: initial; }
+
+.root {
+  position: fixed;
+  inset: 0;
+  font: 12px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* The frozen screenshot sits under everything, at exactly viewport size. */
+.shot {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  object-fit: fill;
+  pointer-events: none;
+}
+
+/* Full-screen dim shown before the drag starts. */
+.dim {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 9, 15, 0.55);
+  pointer-events: none;
+}
+
+/* During the drag this box is transparent, and its huge outward box-shadow
+   dims everything *outside* the selection — a one-element mask. */
+.sel {
+  position: fixed;
+  box-shadow: 0 0 0 100vmax rgba(6, 9, 15, 0.55);
+  outline: 1.5px solid #4c8dff;
+  background: transparent;
+  pointer-events: none;
+}
+
+.sel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  outline: 1px dashed rgba(255, 255, 255, 0.55);
+  outline-offset: -3px;
+}
+
+.size {
+  position: absolute;
+  top: -26px;
+  left: 0;
+  padding: 3px 7px;
+  border-radius: 5px;
+  background: #4c8dff;
+  color: #fff;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.size.inside { top: 6px; left: 6px; }
+
+.hint {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(14, 17, 23, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #e6edf6;
+  pointer-events: none;
+  backdrop-filter: blur(6px);
+}
+
+.hint b {
+  font-weight: 600;
+  padding: 0 4px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  top: 26px;
+  transform: translateX(-50%);
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: rgba(255, 107, 107, 0.95);
+  color: #fff;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+[hidden] { display: none !important; }
