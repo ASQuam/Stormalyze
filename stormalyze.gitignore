@@ -1,0 +1,9 @@
+# Dependencies
+node_modules/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Build/converter env (if you regenerate it locally)
+.stormalyze-convert-env/
